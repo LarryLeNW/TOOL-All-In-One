@@ -10,6 +10,7 @@ gl = GoLogin({
     "token": "YOUR_TOKEN",
     "profile_id": "YOUR_PROFILE",
 })
+linkDuplicate = "YOUR_LINK_DUPLICATE" 
 
 def wait_for_element(page, selector, timeout=30000):
     try:
@@ -232,7 +233,7 @@ def load_json_file(file_path):
       
 def push_product(data, page, index):
     print("Starting push product " + str(index + 1))
-    page.goto('https://seller-us.tiktok.com/product/create/1730367985084043325', wait_until="domcontentloaded", timeout=250000)
+    page.goto(linkDuplicate, wait_until="domcontentloaded", timeout=250000)
     try:
         print("Waiting for page to fully load...")
         page.wait_for_selector(".index__dndContainer--WQKEF", timeout=200000)
