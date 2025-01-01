@@ -1,22 +1,27 @@
 [
     {
-        "name": "HQ344",
-        "profileId": "672c2a0d65e153c2cbb26abc",
-        "linkDuplicate" : "https://seller-us.tiktok.com/product/create/1730362332739179215"
-    },
-        {
         "name": "HQ343",
         "profileId": "672c2733c7dffa8072464d97",
-        "linkDuplicate" : "https://seller-us.tiktok.com/product/create/1730362064389837792"
+        "linkDuplicate": "https://seller-us.tiktok.com/product/create/1730348420938961888"
     },
-      {
+    {
+        "name": "HQ344",
+        "profileId": "672c2a0d65e153c2cbb26abc",
+        "linkDuplicate": "https://seller-us.tiktok.com/product/create/1730348495035208399"
+    },
+    {
         "name": "HQ346",
         "profileId": "672c2ef0a25602bfc4a5dc65",
-        "linkDuplicate" : "https://seller-us.tiktok.com/product/create/1730362735814742915"
+        "linkDuplicate": "https://seller-us.tiktok.com/product/create/1730331409733227395"
     },
-     {
+    {
         "name": "HQ347",
         "profileId": "672c304a9f4b09bf6285d688",
-        "linkDuplicate" : "https://seller-us.tiktok.com/product/create/1730362775993815943"
+        "linkDuplicate": "https://seller-us.tiktok.com/product/create/1730389357028676487"
+    },
+    {
+        "name": "HQ348",
+        "profileId": "672c34481438de54aa41227b",
+        "linkDuplicate": "https://seller-us.tiktok.com/product/create/1730389694642688830"
     }
 ]

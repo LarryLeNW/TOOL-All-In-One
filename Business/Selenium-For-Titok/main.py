@@ -8,7 +8,7 @@ import time
 # Cấu hình GoLogin
 gl = GoLogin({
     "token": "YOUR_TOKEN",
-    "profile_id": "YOUR_PROFILE",
+    "profile_id": "YOUR_PROFILE_ID",
 })
 linkDuplicate = "YOUR_LINK_DUPLICATE" 
 
@@ -20,7 +20,6 @@ def wait_for_element(page, selector, timeout=30000):
     except Exception as e:
         print(f"Error waiting for element '{selector}': {e}")
         return None
-
 
 def clear_temp_folder(folder_path):
     try:
@@ -64,12 +63,12 @@ def enter_option_image(folder_url, page):
 
     # Parent container selector
     parent_selector = ".Property__Container-sc-16fbzyl-0.hYXwqd"
-    parent_element = page.query_selector(parent_selector)
+    parent_element = wait_for_element(page,parent_selector ) 
 
     if parent_element:
         # Select child divs
         div_selector = 'div[role="button"][tabindex="0"][aria-disabled="false"][aria-roledescription="sortable"]'
-        child_divs = parent_element.query_selector_all(div_selector)
+        child_divs =  parent_element.query_selector_all(div_selector)
 
         print(f"Found {len(child_divs)} child divs to process.")
         for index, child_div in enumerate(child_divs):
@@ -83,8 +82,8 @@ def enter_option_image(folder_url, page):
                     input_value = input_element.get_attribute("value")
                     print(f"Child {index + 1}: Input value is '{input_value}'")
 
-                    if input_value and f"{input_value}.jpeg" in file_map:
-                        file_path = file_map[f"{input_value}.jpeg"]
+                    if input_value and f"{input_value}.png" in file_map:
+                        file_path = file_map[f"{input_value}.png"]
                         print(f"File '{file_path}' matches input value '{input_value}'.")
 
                         # Find the file input element inside the child div
@@ -94,7 +93,6 @@ def enter_option_image(folder_url, page):
                         if file_input_element:
                             file_input_element.set_input_files(file_path)
                             print(f"Set file '{file_path}' for child {index + 1}.")
-                            time.sleep(1)
                         else:
                             print(f"File input not found in child {index + 1}.")
                     else:
@@ -161,7 +159,6 @@ def clear_main_images(page):
             element = page.query_selector(check_selector)
             if element:
                 click_element_with_event(page, check_selector)
-                time.sleep(1)
             else:
                 print("Image element not found. Exiting loop.")
                 break
@@ -229,24 +226,28 @@ def load_json_file(file_path):
     except Exception as e:
         print(f"An error occurred while loading the JSON file: {e}")
         return []
-      
-      
+        
 def push_product(data, page, index):
     print("Starting push product " + str(index + 1))
-    page.goto(linkDuplicate, wait_until="domcontentloaded", timeout=250000)
+    
     try:
-        print("Waiting for page to fully load...")
-        page.wait_for_selector(".index__dndContainer--WQKEF", timeout=200000)
-        print("Page loaded successfully.")
+        if page:
+            page.goto(linkDuplicate, wait_until="domcontentloaded", timeout=250000)
+            print("Waiting for page to fully load...")
+            page.wait_for_selector(".index__dndContainer--WQKEF", timeout=200000)
+            print("Page loaded successfully.")
+        else:
+            print("Page not found")
+            return
     except Exception as e:
         print(f"Page did not load properly or timeout occurred: {e}")
-        return
 
     time.sleep(5)
     clear_main_images(page)
     enter_main_image(data['folder_path'], page)
     enter_name_product(data["name"], page)
     enter_desc_product(data["description"], page)
+    time.sleep(2)
     clear_option_images(page)
     enter_option_image(data['folder_path'], page)
     enter_sku(data["sku"], page)
@@ -277,8 +278,6 @@ def push_product(data, page, index):
             print("wait submitting product...")
             time.sleep(1) 
         
-          
-
 def main():
     try:
         # Bắt đầu GoLogin
@@ -299,8 +298,9 @@ def main():
             page = context.pages[-1] if context.pages else context.new_page()
 
             data = load_json_file("data.json")
-            for index, item in enumerate(data):
-                push_product(item, page, index)
+            if page : 
+                for index, item in enumerate(data):
+                    push_product(item, page, index)
            
             
     except Exception as e:
