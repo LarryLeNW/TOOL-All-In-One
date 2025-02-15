@@ -7,10 +7,10 @@ import time
 
 # Cấu hình GoLogin
 gl = GoLogin({
-    "token": "YOUR_TOKEN",
-    "profile_id": "YOUR_PROFILE_ID",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjY3ZDA2MWQyYTg4MDZhN2YyNTcxMjYiLCJ0eXBlIjoiZGV2Iiwiand0aWQiOiI2NzJiMTgxM2YzZTlkOWVjN2FhMWI0ZGMifQ.Pfv0fxIcf6PPhhqzpn7-YN8FCMWuMKsqqALvgAaQtWY",
+    "profile_id": "672c34481438de54aa41227b",
 })
-linkDuplicate = "YOUR_LINK_DUPLICATE" 
+linkDuplicate =  "https://seller-us.tiktok.com/product/create/1730389694642688830" 
 
 def wait_for_element(page, selector, timeout=30000):
     try:
@@ -82,8 +82,8 @@ def enter_option_image(folder_url, page):
                     input_value = input_element.get_attribute("value")
                     print(f"Child {index + 1}: Input value is '{input_value}'")
 
-                    if input_value and f"{input_value}.png" in file_map:
-                        file_path = file_map[f"{input_value}.png"]
+                    if input_value and f"{input_value}.jpeg" in file_map:
+                        file_path = file_map[f"{input_value}.jpeg"]
                         print(f"File '{file_path}' matches input value '{input_value}'.")
 
                         # Find the file input element inside the child div
@@ -230,17 +230,8 @@ def load_json_file(file_path):
 def push_product(data, page, index):
     print("Starting push product " + str(index + 1))
     
-    try:
-        if page:
-            page.goto(linkDuplicate, wait_until="domcontentloaded", timeout=250000)
-            print("Waiting for page to fully load...")
-            page.wait_for_selector(".index__dndContainer--WQKEF", timeout=200000)
-            print("Page loaded successfully.")
-        else:
-            print("Page not found")
-            return
-    except Exception as e:
-        print(f"Page did not load properly or timeout occurred: {e}")
+    page.goto(linkDuplicate, wait_until="domcontentloaded", timeout=250000)
+    page.wait_for_selector(".index__dndContainer--WQKEF", timeout=250000)
 
     time.sleep(5)
     clear_main_images(page)
@@ -298,6 +289,8 @@ def main():
             page = context.pages[-1] if context.pages else context.new_page()
 
             data = load_json_file("data.json")
+            
+            time.sleep(2)
             if page : 
                 for index, item in enumerate(data):
                     push_product(item, page, index)
